@@ -32,7 +32,10 @@
     "compression": "^1.5.2",
     "cors": "^2.7.1",
     "express": "^4.13.3",
-    "resource-router-middleware": "^0.5.1"
+    "mysql": "^2.11.1",
+    "resource-router-middleware": "^0.5.1",
+    "restful-mongoose": "^1.0.0",
+    "sequelize": "^3.23.6"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",

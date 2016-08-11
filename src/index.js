@@ -6,6 +6,8 @@ import initializeDb from './db';
 import middleware from './middleware';
 import api from './api';
 import config from './config.json';
+var ex = require("express");
+
 
 let app = express();
 app.server = http.createServer(app);
@@ -16,11 +18,11 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json({
-	limit : config.bodyLimit
+	limit: config.bodyLimit
 }));
 
-// connect to db
-initializeDb( db => {
+
+initializeDb(db => {
 
 	// internal middleware
 	app.use(middleware({ config, db }));
