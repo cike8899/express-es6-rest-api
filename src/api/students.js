@@ -2,7 +2,7 @@ import resource from 'resource-router-middleware';
 import students from '../models/student';
 import Sequelize from 'sequelize';
 
-export default ({ config, db }) => resource({
+export default ({ config, db, Student}) => resource({
 
     /** Property name to store preloaded entity on `request`. */
     id: 'student',
@@ -11,31 +11,39 @@ export default ({ config, db }) => resource({
 	 *  Errors terminate the request, success sets `req[id] = data`.
 	 */
     load(req, id, callback) {
-        let facet = students.find(facet => facet.id === id),
-            err = facet ? null : 'Not found';
-        callback(err, facet);
+        // let facet = students.find(facet => facet.id === id),
+        //     err = facet ? null : 'Not found';
+        // let facet = Student.findById(Number(id)),
+        //     err = facet ? null : 'Not found';
+        Student.findById(Number(id)).then((ret) => {
+            let err = ret ? null : 'Not found';
+            callback(err, ret);
+        });
+        // callback(err, facet);
     },
 
     /** GET / - List all entities */
     index({ params }, res) {
-        var Student = db.define('student', {
-            id: {
-                type: Sequelize.INTEGER,
-                field: 'id',
-                primaryKey: true
-            },
-            name: {
-                type: Sequelize.STRING,
-                field: 'name' // Will result in an attribute that is firstName when user facing but first_name in the database
-            },
-            age: {
-                type: Sequelize.INTEGER,
-                field: 'age' // Will result in an attribute that is firstName when user facing but first_name in the database
-            }
-        },
-            {
-                freezeTableName: true // Model tableName will be the same as the model name
-            });
+
+        // var Student = db.define('student', {
+        //     id: {
+        //         type: Sequelize.INTEGER,
+        //         field: 'id',
+        //         primaryKey: true
+        //     },
+        //     name: {
+        //         type: Sequelize.STRING,
+        //         field: 'name' // Will result in an attribute that is firstName when user facing but first_name in the database
+        //     },
+        //     age: {
+        //         type: Sequelize.INTEGER,
+        //         field: 'age' // Will result in an attribute that is firstName when user facing but first_name in the database
+        //     }
+        // },
+        //     {
+        //         freezeTableName: true // Model tableName will be the same as the model name
+        //     });
+
         Student.findAll().then(function (all) {
             console.info(all);
             res.json(all);
@@ -52,9 +60,13 @@ export default ({ config, db }) => resource({
 
     /** POST / - Create a new entity */
     create({ body }, res) {
-        body.id = students.length.toString(36);
-        students.push(body);
-        res.json(body);
+        // body.id = students.length.toString(36);
+        Student.create(body).then((ret) => {
+            console.info(ret);
+            res.json(ret);
+        });
+        // students.push(body);
+        // res.json(body);
     },
 
     /** GET /:id - Return a given entity */

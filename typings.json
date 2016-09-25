@@ -4,7 +4,13 @@
     "compression": "registry:dt/compression#0.0.0+20160501162003",
     "cors": "registry:dt/cors#0.0.0+20160708202709",
     "express": "registry:dt/express#4.0.0+20160708185218",
-    "sequelize": "registry:dt/sequelize#3.4.1+20160802154903"
+    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20160923124352",
+    "lodash": "registry:dt/lodash#4.14.0+20160919145112",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "mysql": "registry:dt/mysql#0.0.0+20160316155526",
+    "node-4": "registry:dt/node-4#4.0.0+20160914122103",
+    "sequelize": "registry:dt/sequelize#3.4.1+20160815132916",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157"
   },
   "globalDevDependencies": {
     "babel-core": "registry:dt/babel-core#6.7.0+20160423062108"
