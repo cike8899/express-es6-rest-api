@@ -19,14 +19,14 @@ export default ({ config, db }) => {
 	Note.belongsToMany(Tag, { through: Tagging });
 	Tag.belongsToMany(Note, { through: Tagging });
 
-	Note.sync({ force: true }).then((ret) => {
+	Note.sync().then((ret) => {
 		console.info(ret);
 	});
-	Tag.sync({ force: true }).then((ret) => {
+	Tag.sync().then((ret) => {
 		console.info(ret);
 	});
 
-	Tagging.sync({ force: true }).then((ret) => {
+	Tagging.sync().then((ret) => {
 		console.info(ret);
 	});
 
