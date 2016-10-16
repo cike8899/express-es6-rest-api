@@ -6,6 +6,7 @@ import studentFunc from '../models/student';
 import noteFunc from '../models/note';
 import tagFunc from '../models/tag';
 import taggingFunc from '../models/tagging';
+import tags from './tags';
 
 
 export default ({ config, db }) => {
@@ -36,6 +37,7 @@ export default ({ config, db }) => {
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));
 	api.use('/students', students({ config, db, Student }));
+	api.use('/tags', tags({ config, db, Tag }));
 
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
