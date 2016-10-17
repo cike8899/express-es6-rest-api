@@ -7,7 +7,7 @@ import noteFunc from '../models/note';
 import tagFunc from '../models/tag';
 import taggingFunc from '../models/tagging';
 import tags from './tags';
-
+import admin from './admin/admin';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -31,13 +31,12 @@ export default ({ config, db }) => {
 		console.info(ret);
 	});
 
-
-
-
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));
 	api.use('/students', students({ config, db, Student }));
 	api.use('/tags', tags({ config, db, Tag }));
+	
+	api.use('/admin', admin);
 
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {

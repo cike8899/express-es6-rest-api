@@ -2,7 +2,7 @@ import resource from 'resource-router-middleware';
 import students from '../models/student';
 import Sequelize from 'sequelize';
 
-export default({config, db, Student}) => resource({
+export default ({config, db, Student}) => resource({
 
     /** Property name to store preloaded entity on `request`. */
     id: 'student',
