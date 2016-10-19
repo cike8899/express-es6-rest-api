@@ -8,6 +8,8 @@ let TagFunc = (db) => {
                 'allowNull': false,
                 'unique': true
             }
+            // deletedAt: 'destroyTime',
+            // paranoid: true
         }
     );
     return Tag;

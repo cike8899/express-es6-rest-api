@@ -7,7 +7,7 @@ import noteFunc from '../models/note';
 import tagFunc from '../models/tag';
 import taggingFunc from '../models/tagging';
 import tags from './tags';
-import admin from './admin/admin';
+import adminRouter from './admin/admin';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -35,8 +35,8 @@ export default ({ config, db }) => {
 	api.use('/facets', facets({ config, db }));
 	api.use('/students', students({ config, db, Student }));
 	api.use('/tags', tags({ config, db, Tag }));
-	
-	api.use('/admin', admin);
+
+	api.use('/admin', adminRouter(config, db, { Note: Note, Tag: Tag, Tagging: Tagging }));
 
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {

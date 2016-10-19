@@ -6,6 +6,10 @@ let noteFunc = (db) => {
             'title': {
                 'type': Sequelize.CHAR(64),
                 'allowNull': false
+            },
+            'content': {
+                'type': Sequelize.TEXT("medium"),
+                'allowNull': false
             }
         }
     );

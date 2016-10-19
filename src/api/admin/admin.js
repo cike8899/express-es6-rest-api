@@ -1,8 +1,17 @@
 import { Router } from 'express';
 import adminTag from './adminTag';
+import adminNote from './adminNote';
+import noteFunc from '../../models/note';
+import tagFunc from '../../models/tag';
+import taggingFunc from '../../models/tagging';
 
-let router = Router();
+let adminRouter = (config, db, entity) => {
+    let router = Router();
 
-router.use("/tag", adminTag);
+    router.use("/tag", adminTag(config, db, entity.Tag, entity.Note));
+    router.use("/note", adminNote(config, db, entity.Note, entity.Tag, entity.Tagging));
 
-export default router
+    return router;
+}
+
+export default adminRouter
