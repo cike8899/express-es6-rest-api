@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import co from 'co';
 import TagFunc from '../../models/tag';
+import jwtSimple from 'jwt-simple';
+
+const payload = { foo: 'bar' };
+const secret = 'xxx';
+let token = jwtSimple.encode(payload, secret);
 
 let adminTag = (config, db, Tag, Note) => {
     let router = Router();

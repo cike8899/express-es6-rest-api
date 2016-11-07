@@ -1,10 +1,15 @@
 {
   "globalDependencies": {
+    "blueimp-md5": "registry:dt/blueimp-md5#1.1.0+20160316155526",
     "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
     "compression": "registry:dt/compression#0.0.0+20160501162003",
     "cors": "registry:dt/cors#0.0.0+20160708202709",
     "express": "registry:dt/express#4.0.0+20160708185218",
+    "express-jwt": "registry:dt/express-jwt#0.0.0+20160629014920",
     "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20160923124352",
+    "express-session": "registry:dt/express-session#0.0.0+20160930124524",
+    "jsonwebtoken": "registry:dt/jsonwebtoken#0.0.0+20160720062725",
+    "jwt-simple": "registry:dt/jwt-simple#0.5.0+20160401095215",
     "lodash": "registry:dt/lodash#4.14.0+20160919145112",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "mysql": "registry:dt/mysql#0.0.0+20160316155526",
