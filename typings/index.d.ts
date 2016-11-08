@@ -1,6 +1,7 @@
 /// <reference path="globals/blueimp-md5/index.d.ts" />
 /// <reference path="globals/body-parser/index.d.ts" />
 /// <reference path="globals/compression/index.d.ts" />
+/// <reference path="globals/connect-redis/index.d.ts" />
 /// <reference path="globals/cors/index.d.ts" />
 /// <reference path="globals/express-jwt/index.d.ts" />
 /// <reference path="globals/express-serve-static-core/index.d.ts" />

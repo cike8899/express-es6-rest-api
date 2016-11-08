@@ -8,9 +8,9 @@ let authFunc = (router) => {
         console.info(req);
         let currentUserToken = req.headers.authorization;
         let session = req.session;
-        if (!session.userTokenArr) {
-            session.userTokenArr = [];
-        }
+        // if (!session.userTokenArr) {
+        //     session.userTokenArr = [];
+        // }
 
         let tokenArr = req.session.userTokenArr;
         let isExist = false;
