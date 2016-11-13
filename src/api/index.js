@@ -44,8 +44,8 @@ export default ({ config, db }) => {
 		console.info(ret);
 	});
 
-	api.use("/admin/*", initSessionToken);//初始化session的token
-	api.use(/^((?!user).)*$/, authFunc(api));//匹配不包含user路由的字符串
+	// api.use("/admin/*", initSessionToken);//初始化session的token
+	// api.use(/^((?!user).)*$/, authFunc(api));//匹配不包含user路由的字符串
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));
 	api.use('/students', students({ config, db, Student }));
