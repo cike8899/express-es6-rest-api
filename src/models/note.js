@@ -7,6 +7,10 @@ let noteFunc = (db) => {
                 'type': Sequelize.CHAR(64),
                 'allowNull': false
             },
+            'excerpt': {
+                'type': Sequelize.TEXT("tiny"),
+                'allowNull': true
+            },
             'content': {
                 'type': Sequelize.TEXT("medium"),
                 'allowNull': false

@@ -13,6 +13,7 @@ import authFunc from './auth/auth';
 import initSessionToken from './auth/initSessionToken';
 
 import tags from './tags';
+import notes from './notes';
 import adminRouter from './admin/admin';
 
 import session from 'express-session';
@@ -50,6 +51,7 @@ export default ({ config, db }) => {
 	api.use('/facets', facets({ config, db }));
 	api.use('/students', students({ config, db, Student }));
 	api.use('/tags', tags({ config, db, Tag }));
+	api.use('/notes', notes({ config, db, Note, Tag }));
 
 	api.use('/admin', adminRouter(config, db, { Note: Note, Tag: Tag, Tagging: Tagging, User: User }));
 
