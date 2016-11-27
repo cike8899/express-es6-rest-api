@@ -29,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-preset-stage-3": "^6.17.0",
+    "bluebird": "^3.4.6",
     "blueimp-md5": "^2.5.0",
     "body-parser": "^1.13.3",
     "co": "^4.6.0",
@@ -42,6 +43,8 @@
     "jwt-simple": "^0.5.0",
     "log4js": "^1.0.1",
     "mysql": "^2.11.1",
+    "node-redis": "^0.1.7",
+    "redis": "^2.6.3",
     "resource-router-middleware": "^0.5.1",
     "restful-mongoose": "^1.0.0",
     "sequelize": "^3.23.6"

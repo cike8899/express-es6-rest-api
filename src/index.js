@@ -10,9 +10,9 @@ import jwt from 'express-jwt';
 import session from 'express-session';
 import log4js from 'log4js';
 import path from 'path';
-import redis from 'connect-redis';
+// import redis from 'connect-redis';
 
-let RedisStore = redis(session);
+// let RedisStore = redis(session);
 
 var ex = require("express");
 
@@ -40,30 +40,30 @@ app.use(cors());
 
 app.use(bodyParser.json({ limit: config.bodyLimit }));
 
-app.use(session({
-	store: new RedisStore({
-		host: '127.0.0.1',
-		port: 6397,
-		pass: '',
-		ttl: 30 * 24 * 60 * 60
-	}),
-	secret: "bill",
-	cookie: {
-		maxAge: 30 * 24 * 60 * 60 * 1000//设置maxAge是60mins，即60mins后session和相应的cookie失效过期
-	},
-	resave: false,
-	saveUninitialized: true
-}));
+// app.use(session({
+// 	store: new RedisStore({
+// 		host: '127.0.0.1',
+// 		port: 6397,
+// 		pass: '',
+// 		ttl: 30 * 24 * 60 * 60
+// 	}),
+// 	secret: "bill",
+// 	cookie: {
+// 		maxAge: 30 * 24 * 60 * 60 * 1000//设置maxAge是60mins，即60mins后session和相应的cookie失效过期
+// 	},
+// 	resave: false,
+// 	saveUninitialized: true
+// }));
 
-initializeDb(db => {
+initializeDb((db, client) => {
 				// internal middleware
-	app.use(middleware({ config, db }));
+	app.use(middleware({ config, db, client }));
 	app.use((req, res, next) => {
 		console.info("res:", res);
 		next();
 	});
 	// api router
-	app.use('/api', api({ config, db }));
+	app.use('/api', api({ config, db, client }));
 
 	app.server.listen(process.env.PORT || config.port);
 
