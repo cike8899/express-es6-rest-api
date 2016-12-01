@@ -19,7 +19,7 @@ import adminRouter from './admin/admin';
 
 import session from 'express-session';
 
-export default ({ config, db, client}) => {
+export default ({ config, db}) => {
 	let api = Router();
 
 	let Student = studentFunc(db);
@@ -47,7 +47,7 @@ export default ({ config, db, client}) => {
 	});
 
 	// api.use("/admin/*", initSessionToken);//初始化session的token
-	api.use("/admin/*", filter(client));//初始化session的token
+	// api.use("/admin/*", filter(client));//初始化session的token
 	// api.use(/^((?!user).)*$/, authFunc(api));//匹配不包含user路由的字符串
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));

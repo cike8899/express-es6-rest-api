@@ -55,15 +55,15 @@ app.use(bodyParser.json({ limit: config.bodyLimit }));
 // 	saveUninitialized: true
 // }));
 
-initializeDb((db, client) => {
+initializeDb((db) => {
 				// internal middleware
-	app.use(middleware({ config, db, client }));
+	app.use(middleware({ config, db }));
 	app.use((req, res, next) => {
 		console.info("res:", res);
 		next();
 	});
 	// api router
-	app.use('/api', api({ config, db, client }));
+	app.use('/api', api({ config, db }));
 
 	app.server.listen(process.env.PORT || config.port);
 

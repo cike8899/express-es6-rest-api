@@ -1,12 +1,15 @@
 import NoteFunc from '../../models/note';
 import { Router } from 'express';
 import { isContentContainExcerpt, truncateContent } from '../../utils/excerpt';
+import secret from '../../config/secret';
+import { verifyToken } from '../../config/token_manager';
+import jwt from 'express-jwt';
 
 
 let adminNote = (config, db, Note, Tag, Tagging) => {
     let router = Router();
 
-    router.get("/getallnote", (req, res, next) => {
+    router.get("/getallnote", jwt({ secret: secret, credentialsRequired: false }), verifyToken, (req, res, next) => {
         (async function () {
             let notes = await Note.findAll({
                 "include": [

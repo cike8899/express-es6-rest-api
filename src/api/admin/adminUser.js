@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import jwtSimple from 'jwt-simple';
+// import jwtSimple from 'jwt-simple';
+import jwt from 'jsonwebtoken';
+import secret from '../../config/secret';
+import { expireToken, saveToken, removeToken, TOKEN_EXPIRATION } from '../../config/token_manager';
 
 let adminLogin = (config, db, User) => {
     let router = Router();
 
     router.post("/login", (req, res, next) => {
-        let tokenArr = req.session.userTokenArr;
+        // let tokenArr = req.session.userTokenArr;
         let data = req.body;
         let ret;
         (async function () {
@@ -14,16 +17,10 @@ let adminLogin = (config, db, User) => {
             });
             if (userInfo) {
                 if (userInfo.pwd === data.pwd) {
-                    let payload = { foo: 'bar' };
-                    let secret = 'xxx';
-                    let token;
-                    if (!tokenArr.some(x => x.userName === userInfo.name)) {
-                        token = jwtSimple.encode(payload, secret);
-                        tokenArr.push({ token: token, userName: userInfo.name });
-                    } else {
-                        token = tokenArr.filter(x => x.userName === userInfo.name)[0].token;
-                    }
-                    ret = { success: true, token: token, userName: userInfo.name };
+                    let token = jwt.sign({ id: userInfo.id }, secret, { expiresIn: TOKEN_EXPIRATION })
+                    let finalToken = userInfo.id + " " + token;
+                    saveToken(token);
+                    ret = { success: true, token: finalToken, userName: userInfo.name };
                 } else {
                     ret = { success: false, token: "", userName: userInfo.name };
                 }
@@ -35,19 +32,14 @@ let adminLogin = (config, db, User) => {
     });
 
     router.post("/logout", (req, res, next) => {//销毁session中的token
-        let currentUserToken = req.headers.authorization;
-        let tokenArr = req.session.userTokenArr;
-        let adaptiveTokenArr = tokenArr.filter(x => (x.userName === req.body.name) && (x.token === currentUserToken));
-        let ret;
-        if (adaptiveTokenArr && adaptiveTokenArr[0]) {
-            let tokenObj = adaptiveTokenArr[0];
-            let idx = tokenArr.indexOf(tokenObj);
-            tokenArr.splice(idx, 1);
-            ret = { success: true };
-        } else {
-            ret = { success: false };
-        }
-        res.json(ret);
+        (async function () {
+            let affectedRowCount = await removeToken(req.headers);
+            let ret = false;
+            if (affectedRowCount === 1) {
+                ret = true;
+            }
+            res.json({ success: ret });
+        })()
     });
 
     return router;
