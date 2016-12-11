@@ -15,14 +15,23 @@ export default ({ config, db, Note, Tag}) => {
     });
 
     router.post("/getnotesexcerptbypage", (req, res, next) => {
+        let {currentCount, countPerPage, currentPage} = req.body;
+        let skipCount = 0;
+        if (currentCount) {
+            skipCount = currentPage;
+        } else {
+            skipCount = countPerPage * (currentPage - 1);
+        }
         (async function () {
-            let notes = await Node.findAndCount({
+            let notes = await Note.findAndCount({
                 'include': [Tag],
                 'attributes': ['id', 'title', 'excerpt', 'createdAt', 'updatedAt'],
-                'limit': 20,
-                'offset': 0//跳过的条数
+                'limit': countPerPage,
+                'offset': skipCount//跳过的条数
             });
-            res.json(notes);
+            let pageObj = { currentPage: currentPage, total: notes.count };
+            let data = { pageObj, rows: notes.rows };
+            res.json(data);
         })()
     });
 
@@ -38,3 +47,4 @@ export default ({ config, db, Note, Tag}) => {
 
     return router;
 }
+

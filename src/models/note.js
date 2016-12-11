@@ -8,11 +8,11 @@ let noteFunc = (db) => {
                 'allowNull': false
             },
             'excerpt': {
-                'type': Sequelize.TEXT("tiny"),
+                'type': Sequelize.TEXT("medium"),
                 'allowNull': true
             },
             'content': {
-                'type': Sequelize.TEXT("medium"),
+                'type': Sequelize.TEXT("long"),
                 'allowNull': false
             }
         }

@@ -28,6 +28,12 @@ let adminTag = (config, db, Tag, Note) => {
         });
     });
 
+    router.get("/getallpuretags", (req, res, next) => {
+        Tag.findAndCountAll().then((all) => {
+            res.json(all);
+        });
+    });
+
     router.post("/gettagsbypage", (req, res, next) => {
         let countPerPage = req.body.countPerPage, currentPage = req.body.currentPage;
         Tag.findAndCountAll({

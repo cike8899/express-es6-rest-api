@@ -89,10 +89,10 @@ let adminNote = (config, db, Note, Tag, Tagging) => {
             // let ret = await Note.upsert(val);//insert 返回 true,update 返回false,并不能返回插入后受影响的行数
             let obj, ret;
             if (val.id) {//更新
-                obj = await updatenote(req, res, next, Note, Tag);
+                obj = await updatenote(req, res, next, Note, Tag, Tagging);
                 ret = { isAdd: false, ret: obj.ret, isContainExcerpt: obj.isContainExcerpt };
             } else {//插入
-                obj = await addnote(req, res, next, Note, Tag);
+                obj = await addnote(req, res, next, Note, Tag, Tagging);
                 let note = obj.note.dataValues;
                 note.tags = obj.ret ? obj.ret : [];
                 ret = { isAdd: true, note: note, isContainExcerpt: obj.isContainExcerpt };
@@ -104,7 +104,7 @@ let adminNote = (config, db, Note, Tag, Tagging) => {
     return router;
 }
 
-async function addnote(req, res, next, Note, Tag) {
+async function addnote(req, res, next, Note, Tag, Tagging) {
     let reqData = req.body;
     let note = null;
     let ret = null;
@@ -115,22 +115,43 @@ async function addnote(req, res, next, Note, Tag) {
         let excerpt = truncateContent(reqData.content);
         reqData.excerpt = excerpt;
         note = await Note.create(reqData);
-        let tagList = req.body.tagList;
-        let tagArr = [];
-        if (tagList && tagList.length !== 0) {
-            let tags = await Tag.findAll();
-            if (tags && tags.length !== 0) {
-                for (let item of tagList) {
-                    if (!tags.some(x => x.name === item.name)) {
-                        tagArr.push(item);
-                    }
+        // let tagList = req.body.tags;
+        // let tagArr = [];
+        // if (tagList && tagList.length !== 0) {
+        //     let tags = await Tag.findAll();
+        //     if (tags && tags.length !== 0) {
+        //         for (let item of tagList) {
+        //             if (!tags.some(x => x.name === item.name)) {
+        //                 tagArr.push(item);
+        //             }
+        //         }
+        //     } else {
+        //         tagArr = tagList;
+        //     }
+        //     if (tagArr.length !== 0) {
+        //         let newTags = await Tag.bulkCreate(tagArr, { individualHooks: true });
+        //         ret = await note.addTags(newTags, { "type": 2 });
+        //     }
+        // }
+        if (note) {
+            let taggings = [];
+            let tagArr = req.body.tags;
+            tagArr.forEach(x => {
+                taggings.push({
+                    type: 2,
+                    noteId: note.id,
+                    tagId: x.id
+                });
+            });
+            try {
+                let taggingRet = await Tagging.bulkCreate(taggings, { individualHooks: true });
+                if (taggingRet) {
+                    ret = tagArr;
                 }
-            } else {
-                tagArr = tagList;
-            }
-            if (tagArr.length !== 0) {
-                let newTags = await Tag.bulkCreate(tagArr, { individualHooks: true });
-                ret = await note.addTags(newTags, { "type": 2 });
+                // let taggingRet = await note.addTags(tagArr, { type: 2 });
+                // console.info(taggingRet);
+            } catch (error) {
+                console.info(error);
             }
         }
     } else {
@@ -141,7 +162,7 @@ async function addnote(req, res, next, Note, Tag) {
     return { note, ret, isContainExcerpt };
 }
 
-async function updatenote(req, res, next, Note, Tag) {
+async function updatenote(req, res, next, Note, Tag, Tagging) {
     let ret = null, note = null, isContainExcerpt = null;
     // if (note) {
     //     ret = await note.update({ title: req.body.title, content: req.body.content });
@@ -149,6 +170,7 @@ async function updatenote(req, res, next, Note, Tag) {
     //     ret = { success: "there is no this note" };
     // }
     let con = req.body.content;
+    // let tags = req.body.tags;
     if (isContentContainExcerpt(con)) {
         isContainExcerpt = true;
         let excerpt = truncateContent(con);
@@ -158,7 +180,23 @@ async function updatenote(req, res, next, Note, Tag) {
             excerpt: excerpt
         }, { where: { id: req.body.id } });
 
+        // let tagsRet = await note.addTags(tags, { "type": 2 });
+
         if (note) {
+            let taggings = [];
+            let tagArr = req.body.tags;
+            tagArr.forEach(x => {
+                taggings.push({
+                    type: 2,
+                    noteId: req.body.id,
+                    tagId: x.id
+                });
+            });
+            try {
+                Tagging.bulkCreate(taggings, { individualHooks: true });
+            } catch (error) {
+                console.info(error);
+            }
             ret = note;
         } else {
             ret = { success: "there is no this note" };
@@ -170,20 +208,8 @@ async function updatenote(req, res, next, Note, Tag) {
     return { note, ret, isContainExcerpt };
 }
 
-// function isContentContainExcerpt(content) {
-//     //判断文章有没有包含摘要，文章主体和摘要用这个标识符分割
-//     let excerpt = content.indexOf("<!-- split -->");
-//     let isContain = true;
-//     if (excerpt === -1) {
-//         isContain = false;
-//     }
-//     return isContain;
-// }
+function bindTagsToNote(Note, Tag) {
 
-// function truncateContent(content) {
-//     let idx = content.indexOf("<!-- split -->");
-//     let excerpt = content.substring(0, idx);
-//     return excerpt;
-// }
+}
 
 export default adminNote;
